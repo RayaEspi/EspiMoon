@@ -78,9 +78,16 @@ public class HubFactory : MediatorSubscriberBase
         }
 
         Logger.LogDebug("Building new HubConnection using transport {transport}", transportType);
+        
+        // Adding support for Lightless
+        var apiPath = IMareHub.Path;
+        if (_serverConfigurationManager.CurrentApiUrl == "wss://sync.lightless-sync.org")
+        {
+            apiPath = "/lightless";
+        }
 
         _instance = new HubConnectionBuilder()
-            .WithUrl(_serverConfigurationManager.CurrentApiUrl + IMareHub.Path, options =>
+            .WithUrl(_serverConfigurationManager.CurrentApiUrl + apiPath, options =>
             {
                 options.AccessTokenProvider = () => _tokenProvider.GetOrUpdateToken(ct);
                 options.Transports = transportType;
