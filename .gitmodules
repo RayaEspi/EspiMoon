@@ -1,0 +1,3 @@
+[submodule "EspiMoonAPI"]
+	path = EspiMoonAPI
+	url = https://github.com/RayaEspi/EspiMoonAPI.git
