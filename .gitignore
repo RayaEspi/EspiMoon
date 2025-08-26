@@ -9,7 +9,6 @@
 *.user
 *.userosscache
 *.sln.docstates
-EspiMoonAPI/
 .idea/
 
 # User-specific files (MonoDevelop/Xamarin Studio)
