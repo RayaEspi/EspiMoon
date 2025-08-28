@@ -138,7 +138,22 @@ public sealed class FileUploadManager : DisposableMediatorSubscriberBase
             FileHashes = hashes,
             UIDs = uids
         };
-        var response = await _orchestrator.SendRequestAsync(HttpMethod.Post, MareFiles.ServerFilesFilesSendFullPath(_orchestrator.FilesCdnUri!), filesSendDto, ct).ConfigureAwait(false);
+        var url = MareFiles.ServerFilesFilesSendFullPath(_orchestrator.FilesCdnUri!);
+        var response = await _orchestrator.SendRequestAsync(HttpMethod.Post, url, filesSendDto, ct).ConfigureAwait(false);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            Logger.LogWarning("FilesSend received non-success status code: {status} for URL: {url}", response.StatusCode, url);
+            return [];
+        }
+
+        var contentString = await response.Content.ReadAsStringAsync(ct).ConfigureAwait(false);
+        if (string.IsNullOrWhiteSpace(contentString))
+        {
+            Logger.LogWarning("FilesSend received empty response content for URL: {url}", url);
+            return [];
+        }
+
         return await response.Content.ReadFromJsonAsync<List<UploadFileDto>>(cancellationToken: ct).ConfigureAwait(false) ?? [];
     }
 
