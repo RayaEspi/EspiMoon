@@ -222,8 +222,11 @@ public sealed partial class ApiController : DisposableMediatorSubscriberBase, IM
                 if (token.IsCancellationRequested) break;
 
                 _mareHub = _hubFactory.GetOrCreate(token);
+                Logger.LogDebug("HubFactory creating hub for URL: {url}", _serverManager.CurrentServer.ServerUri);
+
                 InitializeApiHooks();
 
+                Logger.LogDebug("Attempting to connect to SignalR hub at: {url}", _serverManager.CurrentServer.ServerUri);
                 await _mareHub.StartAsync(token).ConfigureAwait(false);
 
                 _connectionDto = await GetConnectionDto().ConfigureAwait(false);

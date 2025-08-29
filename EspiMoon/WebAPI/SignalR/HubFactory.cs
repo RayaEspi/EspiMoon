@@ -81,7 +81,7 @@ public class HubFactory : MediatorSubscriberBase
         
         // Adding support for Lightless
         var apiPath = IMareHub.Path;
-        if (_serverConfigurationManager.CurrentApiUrl == "wss://sync.lightless-sync.org")
+        if (string.Equals(_serverConfigurationManager.CurrentApiUrl, "wss://sync.lightless-sync.org", StringComparison.Ordinal))
         {
             apiPath = "/lightless";
         }
